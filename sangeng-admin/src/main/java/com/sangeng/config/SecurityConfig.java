@@ -74,9 +74,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/comment").authenticated()
 
                 */
+                .antMatchers("/user/login").anonymous()
 
                 // 除上面外的所有请求全部不需要认证即可访问
-                .anyRequest().permitAll();
+                .anyRequest().authenticated();
 
         //把我们写的自定义异常处理器配置给Security
         http.exceptionHandling()
