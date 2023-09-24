@@ -10,7 +10,11 @@ import com.sangeng.domain.vo.TagVo;
 import com.sangeng.service.TagService;
 import com.sangeng.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/content/tag")
@@ -54,7 +58,8 @@ public class TagController {
 
     @GetMapping("/listAllTag")
     public ResponseResult listAllTag() {
-        return tagService.listAllTag();
+        List<TagVo> list = tagService.listAllTag();
+        return ResponseResult.okResult(list);
     }
 
 }
