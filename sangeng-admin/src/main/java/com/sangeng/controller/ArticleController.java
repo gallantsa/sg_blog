@@ -40,4 +40,12 @@ public class ArticleController {
         return ResponseResult.okResult();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseResult delete(@PathVariable Long id) {
+        articleService.removeById(id);
+        return ResponseResult.okResult();
+    }
+
+
+
 }
