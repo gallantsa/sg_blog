@@ -52,4 +52,9 @@ public class TagController {
         return ResponseResult.okResult();
     }
 
+    @GetMapping("/listAllTag")
+    public ResponseResult listAllTag() {
+        return tagService.listAllTag();
+    }
+
 }

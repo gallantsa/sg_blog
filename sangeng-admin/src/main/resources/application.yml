@@ -22,3 +22,8 @@ mybatis-plus:
       logic-not-delete-value: 0
       id-type: auto
 
+oss:
+  accessKey: 8JdREV4ounBWhdbGyECYsN2mFTXc8O88FrtPUmx1
+  secretKey: sHyt4dFG0f1HLsmXAJBlBBD5UCKI6_9swwMQYmLD
+  bucket: sg-blogsa
+
