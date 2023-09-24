@@ -9,10 +9,7 @@ import com.sangeng.domain.dto.AddArticleDto;
 import com.sangeng.domain.entity.Article;
 import com.sangeng.domain.entity.ArticleTag;
 import com.sangeng.domain.entity.Category;
-import com.sangeng.domain.vo.ArticleDetailVo;
-import com.sangeng.domain.vo.ArticleListVo;
-import com.sangeng.domain.vo.HotArticleVo;
-import com.sangeng.domain.vo.PageVo;
+import com.sangeng.domain.vo.*;
 import com.sangeng.mapper.ArticleMapper;
 import com.sangeng.service.ArticleService;
 import com.sangeng.service.ArticleTagService;
@@ -23,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,5 +145,29 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //添加 博客和标签的关联
         articleTagService.saveBatch(articleTags);
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public PageVo selectArticlePage(Article article, Integer pageNum, Integer pageSize) {
+
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(StringUtils.hasText(article.getSummary()), Article::getSummary, article.getSummary());
+        queryWrapper.like(StringUtils.hasText(article.getTitle()), Article::getTitle, article.getTitle());
+
+        Page<Article> page = new Page<>();
+        page.setCurrent(pageNum);
+        page.setSize(pageSize);
+        page(page, queryWrapper);
+
+        List<Article> articles = page.getRecords();
+
+        // 转换成ArticlePageVo
+        List<ArticlePageVo> articlePageVos = BeanCopyUtils.copyBeanList(articles, ArticlePageVo.class);
+
+        PageVo pageVo = new PageVo();
+        pageVo.setRows(articlePageVos);
+        pageVo.setTotal(page.getTotal());
+
+        return pageVo;
     }
 }
