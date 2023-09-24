@@ -29,4 +29,12 @@ public class TagController {
         return ResponseResult.okResult();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseResult delete(@PathVariable Long id) {
+        tagService.removeById(id);
+        return ResponseResult.okResult();
+    }
+
+
+
 }
