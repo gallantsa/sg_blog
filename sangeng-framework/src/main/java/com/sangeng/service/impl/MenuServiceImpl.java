@@ -8,6 +8,7 @@ import com.sangeng.mapper.MenuMapper;
 import com.sangeng.service.MenuService;
 import com.sangeng.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,6 +58,17 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         // 先找出第一层的菜单  然后去找他们的子菜单设置到children属性中
         List<Menu> menuTree = builderMenuTree(menus, 0L);
         return menuTree;
+    }
+
+    @Override
+    public List<Menu> selectMenuList(Menu menu) {
+        LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(StringUtils.hasText(menu.getMenuName()), Menu::getMenuName, menu.getMenuName());
+        wrapper.eq(StringUtils.hasText(menu.getStatus()), Menu::getStatus, menu.getStatus());
+        wrapper.orderByAsc(Menu::getParentId, Menu::getOrderNum);
+
+        List<Menu> menus = list(wrapper);
+        return menus;
     }
 
     private List<Menu> builderMenuTree(List<Menu> menus, Long parentId) {
