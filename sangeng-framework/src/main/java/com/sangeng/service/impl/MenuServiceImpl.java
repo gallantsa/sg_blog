@@ -82,6 +82,22 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         return ResponseResult.okResult();
     }
 
+    @Override
+    public ResponseResult deleteById(Long id) {
+        Menu menu = getById(id);
+
+        // 判断是否有子菜单
+        LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Menu::getParentId, id);
+        if (count(wrapper) != 0) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "存在子菜单不允许删除");
+        }
+
+        // 如果没有子菜单则直接删除
+        removeById(id);
+        return ResponseResult.okResult();
+    }
+
     private List<Menu> builderMenuTree(List<Menu> menus, Long parentId) {
         List<Menu> menuTree = menus.stream()
                 .filter(menu -> menu.getParentId().equals(parentId))

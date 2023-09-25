@@ -41,4 +41,9 @@ public class MenuController {
     public ResponseResult edit(@RequestBody Menu menu) {
         return menuService.edit(menu);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseResult deleteById(@PathVariable Long id) {
+        return menuService.deleteById(id);
+    }
 }
