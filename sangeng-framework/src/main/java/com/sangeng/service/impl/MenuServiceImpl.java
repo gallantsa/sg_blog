@@ -3,7 +3,9 @@ package com.sangeng.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sangeng.constants.SystemConstants;
+import com.sangeng.domain.ResponseResult;
 import com.sangeng.domain.entity.Menu;
+import com.sangeng.enums.AppHttpCodeEnum;
 import com.sangeng.mapper.MenuMapper;
 import com.sangeng.service.MenuService;
 import com.sangeng.utils.SecurityUtils;
@@ -69,6 +71,15 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
         List<Menu> menus = list(wrapper);
         return menus;
+    }
+
+    @Override
+    public ResponseResult edit(Menu menu) {
+        if (menu.getId().equals(menu.getParentId())) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR, "修改菜单'写博文'失败，上级菜单不能选择自己");
+        }
+        updateById(menu);
+        return ResponseResult.okResult();
     }
 
     private List<Menu> builderMenuTree(List<Menu> menus, Long parentId) {

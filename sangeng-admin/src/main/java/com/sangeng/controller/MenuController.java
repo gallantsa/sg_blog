@@ -30,4 +30,15 @@ public class MenuController {
         menuService.save(menu);
         return ResponseResult.okResult();
     }
+
+    @GetMapping("/{id}")
+    public ResponseResult getInfo(@PathVariable Long id) {
+        Menu menu = menuService.getById(id);
+        return ResponseResult.okResult(menu);
+    }
+
+    @PutMapping
+    public ResponseResult edit(@RequestBody Menu menu) {
+        return menuService.edit(menu);
+    }
 }
