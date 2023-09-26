@@ -78,6 +78,12 @@ public class CategoryController {
         return ResponseResult.okResult();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseResult delete(@PathVariable Long id) {
+        categoryService.removeById(id);
+        return ResponseResult.okResult();
+    }
+
 
 
 
