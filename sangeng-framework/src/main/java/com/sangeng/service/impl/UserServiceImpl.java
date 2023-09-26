@@ -1,9 +1,11 @@
 package com.sangeng.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sangeng.domain.ResponseResult;
 import com.sangeng.domain.entity.User;
+import com.sangeng.domain.vo.PageVo;
 import com.sangeng.domain.vo.UserInfoVo;
 import com.sangeng.enums.AppHttpCodeEnum;
 import com.sangeng.handler.exception.SystemException;
@@ -75,6 +77,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //存入数据库
         save(user);
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult listAllUser(User user, Integer pageNum, Integer pageSize) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(StringUtils.hasText(user.getUserName()), User::getUserName, user.getUserName());
+        queryWrapper.eq(StringUtils.hasText(user.getPhonenumber()), User::getPhonenumber, user.getPhonenumber());
+        queryWrapper.eq(StringUtils.hasText(user.getStatus()), User::getStatus, user.getStatus());
+
+        Page<User> userPage = new Page<>();
+        userPage.setCurrent(pageNum);
+        userPage.setSize(pageSize);
+        page(userPage, queryWrapper);
+
+        PageVo pageVo = new PageVo();
+        pageVo.setRows(userPage.getRecords());
+        pageVo.setTotal(userPage.getTotal());
+        return ResponseResult.okResult(pageVo);
     }
 
     private boolean nickNameExist(String nickName) {
