@@ -28,5 +28,7 @@ public interface UserService extends IService<User> {
     boolean checkPhoneUnique(User user);
 
     boolean checkEmailUnique(User user);
+
+    void updateUser(User user);
 }
 

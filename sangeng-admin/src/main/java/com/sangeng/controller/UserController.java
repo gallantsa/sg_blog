@@ -1,9 +1,12 @@
 package com.sangeng.controller;
 
 import com.sangeng.domain.ResponseResult;
+import com.sangeng.domain.entity.Role;
 import com.sangeng.domain.entity.User;
+import com.sangeng.domain.vo.UserInfoAndRoleIdsVo;
 import com.sangeng.enums.AppHttpCodeEnum;
 import com.sangeng.handler.exception.SystemException;
+import com.sangeng.service.RoleService;
 import com.sangeng.service.UserService;
 import com.sangeng.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
 
     @GetMapping("/list")
     public ResponseResult listAllUser(User user, Integer pageNum, Integer pageSize) {
@@ -51,6 +57,27 @@ public class UserController {
             return ResponseResult.errorResult(500,"不能删除当前你正在使用的用户");
         }
         userService.removeByIds(userIds);
+        return ResponseResult.okResult();
+    }
+
+    /**
+     * 根据用户编号获取详细信息
+     */
+    @GetMapping(value = { "/{id}" })
+    public ResponseResult getUserInfoAndRoleIds(@PathVariable Long id)
+    {
+        List<Role> roles = roleService.selectRoleAll();
+        User user = userService.getById(id);
+        //当前用户所具有的角色id列表
+        List<Long> roleIds = roleService.selectRoleIdByUserId(id);
+
+        UserInfoAndRoleIdsVo vo = new UserInfoAndRoleIdsVo(user,roles,roleIds);
+        return ResponseResult.okResult(vo);
+    }
+
+    @PutMapping
+    public ResponseResult edit(@RequestBody User user) {
+        userService.updateUser(user);
         return ResponseResult.okResult();
     }
 }

@@ -58,6 +58,6 @@ public class RoleController {
 
     @GetMapping("/listAllRole")
     public ResponseResult listAllRole() {
-        return roleService.selectRoleAll();
+        return ResponseResult.okResult(roleService.selectRoleAll());
     }
 }
