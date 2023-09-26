@@ -6,6 +6,7 @@ import com.sangeng.domain.ResponseResult;
 import com.sangeng.domain.entity.Category;
 import com.sangeng.domain.vo.CategoryVo;
 import com.sangeng.domain.vo.ExcelCategoryVo;
+import com.sangeng.domain.vo.PageVo;
 import com.sangeng.enums.AppHttpCodeEnum;
 import com.sangeng.service.CategoryService;
 import com.sangeng.utils.BeanCopyUtils;
@@ -52,10 +53,13 @@ public class CategoryController {
             // 如果出现异常也要响应json
             ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR);
             WebUtils.renderString(response, JSON.toJSONString(result));
-
         }
+    }
 
-
+    @GetMapping("/list")
+    public ResponseResult list(Category category, Integer pageNum, Integer pageSize) {
+        PageVo pageVo = categoryService.selectCategoryPage(category, pageNum, pageSize);
+        return ResponseResult.okResult(pageVo);
     }
 
 
