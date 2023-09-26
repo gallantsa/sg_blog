@@ -5,6 +5,7 @@ import com.sangeng.domain.entity.User;
 import com.sangeng.enums.AppHttpCodeEnum;
 import com.sangeng.handler.exception.SystemException;
 import com.sangeng.service.UserService;
+import com.sangeng.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,18 @@ public class UserController {
             throw new SystemException(AppHttpCodeEnum.EMAIL_EXIST);
         }
         userService.addUser(user);
+        return ResponseResult.okResult();
+    }
+
+    /**
+     * 删除用户
+     */
+    @DeleteMapping("/{userIds}")
+    public ResponseResult remove(@PathVariable List<Long> userIds) {
+        if(userIds.contains(SecurityUtils.getUserId())){
+            return ResponseResult.errorResult(500,"不能删除当前你正在使用的用户");
+        }
+        userService.removeByIds(userIds);
         return ResponseResult.okResult();
     }
 }
