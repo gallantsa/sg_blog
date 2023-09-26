@@ -55,4 +55,9 @@ public class RoleController {
         roleService.removeById(id);
         return ResponseResult.okResult();
     }
+
+    @GetMapping("/listAllRole")
+    public ResponseResult listAllRole() {
+        return roleService.selectRoleAll();
+    }
 }

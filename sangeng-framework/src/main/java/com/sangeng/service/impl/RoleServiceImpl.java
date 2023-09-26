@@ -1,13 +1,17 @@
 package com.sangeng.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sangeng.constants.SystemConstants;
 import com.sangeng.domain.ResponseResult;
 import com.sangeng.domain.dto.ChangeRoleStatusDto;
 import com.sangeng.domain.entity.Role;
 import com.sangeng.domain.entity.RoleMenu;
+import com.sangeng.domain.entity.User;
 import com.sangeng.domain.vo.PageVo;
+import com.sangeng.enums.AppHttpCodeEnum;
 import com.sangeng.mapper.RoleMapper;
 import com.sangeng.service.RoleMenuService;
 import com.sangeng.service.RoleService;
@@ -81,6 +85,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         updateById(role);
         roleMenuService.deleteRoleMenuByRoleId(role.getId());
         insertRoleMenu(role);
+    }
+
+    @Override
+    public ResponseResult selectRoleAll() {
+        List<Role> roles = list(Wrappers.<Role>lambdaQuery().eq(Role::getStatus, SystemConstants.NORMAL));
+        return ResponseResult.okResult(roles);
     }
 
     private void insertRoleMenu(Role role) {
