@@ -66,6 +66,19 @@ public class CategoryController {
         return ResponseResult.okResult();
     }
 
+    @GetMapping("/{id}")
+    public ResponseResult getInfo(@PathVariable Long id) {
+        Category category = categoryService.getById(id);
+        return ResponseResult.okResult(category);
+    }
+
+    @PutMapping
+    public ResponseResult edit(@RequestBody Category category) {
+        categoryService.updateById(category);
+        return ResponseResult.okResult();
+    }
+
+
 
 
 }
