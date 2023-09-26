@@ -25,4 +25,16 @@ public class LinkController {
         linkService.save(link);
         return ResponseResult.okResult();
     }
+
+    @GetMapping("/{id}")
+    public ResponseResult getInfo(@PathVariable Long id) {
+        Link link = linkService.getById(id);
+        return ResponseResult.okResult(link);
+    }
+
+    @PutMapping
+    public ResponseResult edit(@RequestBody Link link) {
+        linkService.updateById(link);
+        return ResponseResult.okResult();
+    }
 }
