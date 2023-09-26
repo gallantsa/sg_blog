@@ -4,6 +4,7 @@ import com.sangeng.domain.ResponseResult;
 import com.sangeng.domain.entity.Menu;
 import com.sangeng.domain.vo.MenuTreeVo;
 import com.sangeng.domain.vo.MenuVo;
+import com.sangeng.domain.vo.RoleMenuTreeSelectVo;
 import com.sangeng.service.MenuService;
 import com.sangeng.utils.BeanCopyUtils;
 import com.sangeng.utils.SystemConverter;
@@ -58,5 +59,17 @@ public class MenuController {
         List<Menu> menus = menuService.selectMenuList(new Menu());
         List<MenuTreeVo> options =  SystemConverter.buildMenuSelectTree(menus);
         return ResponseResult.okResult(options);
+    }
+
+    /**
+     * 加载对应角色菜单列表树
+     */
+    @GetMapping(value = "/roleMenuTreeselect/{roleId}")
+    public ResponseResult roleMenuTreeSelect(@PathVariable("roleId") Long roleId) {
+        List<Menu> menus = menuService.selectMenuList(new Menu());
+        List<Long> checkedKeys = menuService.selectMenuListByRoleId(roleId);
+        List<MenuTreeVo> menuTreeVos = SystemConverter.buildMenuSelectTree(menus);
+        RoleMenuTreeSelectVo vo = new RoleMenuTreeSelectVo(checkedKeys,menuTreeVos);
+        return ResponseResult.okResult(vo);
     }
 }

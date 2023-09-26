@@ -36,6 +36,17 @@ public class RoleController {
     {
         roleService.insertRole(role);
         return ResponseResult.okResult();
+    }
 
+    @GetMapping("/{id}")
+    public ResponseResult getInfo(@PathVariable Long id) {
+        Role role = roleService.getById(id);
+        return ResponseResult.okResult(role);
+    }
+
+    @PutMapping
+    public ResponseResult edit(@RequestBody Role role) {
+        roleService.updateRole(role);
+        return ResponseResult.okResult();
     }
 }

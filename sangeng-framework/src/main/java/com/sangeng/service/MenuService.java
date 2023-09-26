@@ -24,5 +24,7 @@ public interface MenuService extends IService<Menu> {
     ResponseResult edit(Menu menu);
 
     ResponseResult deleteById(Long id);
+
+    List<Long> selectMenuListByRoleId(Long roleId);
 }
 

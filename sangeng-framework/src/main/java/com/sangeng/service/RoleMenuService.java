@@ -12,5 +12,6 @@ import com.sangeng.domain.entity.RoleMenu;
  */
 public interface RoleMenuService extends IService<RoleMenu> {
 
+    void deleteRoleMenuByRoleId(Long id);
 }
 
