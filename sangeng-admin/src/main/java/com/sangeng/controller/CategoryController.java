@@ -13,9 +13,7 @@ import com.sangeng.utils.BeanCopyUtils;
 import com.sangeng.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
@@ -60,6 +58,12 @@ public class CategoryController {
     public ResponseResult list(Category category, Integer pageNum, Integer pageSize) {
         PageVo pageVo = categoryService.selectCategoryPage(category, pageNum, pageSize);
         return ResponseResult.okResult(pageVo);
+    }
+
+    @PostMapping
+    public ResponseResult add(@RequestBody Category category) {
+        categoryService.save(category);
+        return ResponseResult.okResult();
     }
 
 
